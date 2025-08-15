@@ -1,0 +1,78 @@
+{% extends "defects/base.html" %}
+{% block content %}
+   <style>
+     .tbodyc:hover{
+         background-color:#f2f2f2; 
+         } 
+    </style>
+<div class="container">
+    <div class="jumbotron">
+        <br><br>
+            <form action="" method="post">
+                {% csrf_token %}
+                <label for="username"> Enter DeveloperName:</label>
+                <select name="username">
+                    {% for i in dev %}
+                        <option value="{{ i.dev_name.username }}" {% if selected_user == i.dev_name.username %}selected{% endif %}>
+                            {{ i.dev_name.username }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <input type="submit" name="" id="" value="filter" class="btn btn-primary">
+            </form>
+    </div>
+</div>
+<div class="container">
+    <div class="jumbotron">
+        <b style="position: relative; left: 980px; top: 50px;">Total Defects : {{td}}</b>
+        <h1 style="text-align: center;">List of all Defects</h1>
+        <table border="1" cellpadding="20" style="text-align: center;">
+            <thead style="background-color: #37474F; color: aliceblue;">
+                <tr>
+                    <th>Defect Id</th>
+                    <th>Defect Name</th>
+                    <th>Asigned By</th>
+                    <th>Asigned To</th>
+                    <th>Description</th>
+                    <th>Defect Status</th>
+                    <th>Priority</th>
+                    {% if tadmin %}
+                    <th>Edit</th>
+                    <th>Delete</th>
+                    {% endif %}
+                    <th>Asigned Date</th>
+                </tr>
+            </thead>
+            <tbody style="background-color: #FAFAFA;">
+                {% for i in data %}
+                    <tr class="tbodyc" {% if i.defect_status == "completed" %} style="background-color: lightgreen;" {% endif %}>
+                        <td>{{ i.defect_id }}</td>
+                        <td>{{ i.defect_name }}</td>
+                        <td>{{ i.assigned_by }}</td>
+                        <td>{{ i.assigned_to }}</td>
+                        <td><a href="{{ i.id }}" class="nav-link">More Info</a></td>
+                        <td>{{ i.defect_status }}</td>
+                        {% if i.priority == 'High' %}
+                            <td>🔔</td>
+                        {% elif i.priority == 'Medium' %}
+                            <td>Ⓜ️</td>
+                        {% elif i.priority == 'Low' %}
+                            <td>😴</td>
+                        {% endif %}
+                        {% if tadmin %}
+                        <th><a href="{% url 'edit' id=i.id%}" class="nav-link"><i class="bi bi-pencil-square"></i></a></th>
+                        <th><a href="#" class="nav-link"><i class="bi bi-trash3"></i></a></th>
+                        {% endif %}
+                        <td>{{ i.assigned_date }}</td>
+                    </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        {% if tadmin %}
+        <a href="{% url 'add' %}" class="btn btn-success">ADD</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock  %}

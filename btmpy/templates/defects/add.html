@@ -1,0 +1,15 @@
+{% extends 'defects/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 style="text-align: center;">Add New Defect</h2>
+    <div class="card p-4">
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success">Submit</button>
+            <a href="{% url 'alldefects' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

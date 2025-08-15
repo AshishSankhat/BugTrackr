@@ -1,0 +1,89 @@
+{% extends 'defects/base.html' %}
+{% block content %}
+    
+    <div class="container">
+        <div class="jumbotron">
+            <h1 style="text-align: center;">List of All Defects</h1>
+            <p><strong>Total Defects:</strong> {{ total_defects }}</p>
+            <div class="row">
+            <table class="table table-bordered table-striped table-hover">
+                <tr>
+                    <th>defect_id</th>
+                    <th>defect_name</th>
+                    <th>assigned_by</th>
+                    <th>assigned_to</th>
+                    <th>description</th>
+                    <th>defect_status</th>
+                    <th>priority</th>
+                    {% if test.is_admin == True %}
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    {% endif %}
+                    <th>assigned_date</th>
+                </tr>
+                {% for i in data %}
+                <tr>
+                    <td>{{ i.defect_id }}</td>
+                    <td>{{ i.defect_name }}</td>
+                    <td>{{ i.assigned_by }}</td>
+                    <td>{{ i.assigned_to }}</td>
+                    <td><a href="{{i.id}}">More Info</a></td>
+                    <td>{{ i.defect_status }}</td>
+                    <td>
+                    {% if i.priority == 'High' %}
+                        <p>🔔</p>
+                    {% elif i.priority == 'Medium' %}
+                        <p>Ⓜ️</p>
+                    {% else %}
+                        <p>😴</p>
+                    {% endif %}
+                    </td>
+                    {% if test.is_admin == True %}
+                        <td><a href="{% url 'edit' i.id %}">📝</a></td>
+                        <td><a href="{% url 'delete' i.id %}" onclick="return confirm('Are you sure you want to delete this defect?');">🗑️</a></td>
+                        {% endif %}
+                    <td>{{ i.assigned_date }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% if test.is_admin == True %}
+            <div style="text-align: left; margin-bottom: 20px;">
+                <a href="{% url 'add' %}" class="btn btn-primary">➕ Add Defect</a>
+            </div>
+        {% endif %}
+        </div>
+        </div>
+    </div>
+          
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    {% if data.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?pg={{ data.previous_page_number }}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+    {% endif %}
+
+    {% for page_num in data.paginator.page_range %}
+      <li class="page-item {% if page_num == data.number %}active{% endif %}">
+        <a class="page-link" href="?pg={{ page_num }}">{{ page_num }}</a>
+      </li>
+    {% endfor %}
+
+    {% if data.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?pg={{ data.next_page_number }}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+    {% endif %}
+  </ul>
+</nav>
+
+{% endblock %}

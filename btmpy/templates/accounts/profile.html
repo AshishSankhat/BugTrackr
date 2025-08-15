@@ -1,0 +1,66 @@
+{% extends 'accounts/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <div class="jumbotron">
+        <h1>{{user.username}}'s profile</h1>
+        <div class="card card-body">
+            <div class="row">
+                <div class="col-md-6"> 
+                    <h5>Email:{{user.email}}</h5>
+                    <p>Door_no:{{user.userdata.Door_no}}</p>
+                    <p>street:{{user.userdata.street}}</p>
+                    <p>city:{{user.userdata.city}}</p>
+                    <p>state:{{user.userdata.state}}</p>
+                    <p>zipcode:{{user.userdata.zipcode}}</p>
+                    <a class="btn btn-primary" href="{% url 'update' %}">Update</a>
+            
+                </div>
+                <div class="col-md-6">
+                    {% if user.userdata.profile_pic %}
+                     <img src="{{user.userdata.profile_pic.url}}" alt="no img" style="border-radius:50%; height:250px; width:230px; position:relative; left:200px" > 
+                    {% else %}
+
+                    {% endif%}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+{% if d %}
+<div class="container">
+    <div class="jumbotron">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card card-body">
+                    <h3>Total Defects assigned</h3>
+                    <p>{{ total_defects }}</p>
+                    </div>
+                </div>
+            
+    
+        
+                <div class="col-md-4">
+                    <div class="card card-body" >
+                    <h3>Completed Defects</h3>
+                    <p>{{completed}}</p>
+                    </div>
+                </div>
+            
+        
+            
+                <div class="col-md-4">
+                    <div class="card card-body" >
+                    <h3>Pending</h3>
+                    <p>{{pending}}</p>
+                    </div>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
